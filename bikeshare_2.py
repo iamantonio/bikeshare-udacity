@@ -119,20 +119,24 @@ def time_stats(df):
     print('-' * 40)
 
 
-# def station_stats(df):
-#     """Displays statistics on the most popular stations and trip."""
-#
-#     print('\nCalculating The Most Popular Stations and Trip...\n')
-#     start_time = time.time()
-#
-#     # display most commonly used start station
-#
-#     # display most commonly used end station
-#
-#     # display most frequent combination of start station and end station trip
-#
-#     print("\nThis took %s seconds." % (time.time() - start_time))
-#     print('-' * 40)
+def station_stats(df):
+    """Displays statistics on the most popular stations and trip."""
+
+    print('\nCalculating The Most Popular Stations and Trip...\n')
+    start_time = time.time()
+
+    # display most commonly used start station
+    print('The most commonly used start station is', df['Start Station'].mode()[0])
+
+    # display most commonly used end station
+    print('The most commonly used end station is', df['End Station'].mode()[0])
+    # display most frequent combination of start station and end station trip
+    # In order to display the most frequent combination of start and end station trip, i will need to groupby
+    group_stations = df.groupby(['Start Station', 'End Station'])
+    print('The most frequent combination of start station and end station trip is: \n',
+          group_stations.size().sort_values(ascending=False).head(1))
+    print("\nThis took %s seconds." % (time.time() - start_time))
+    print('-' * 40)
 #
 #
 # def trip_duration_stats(df):
@@ -171,7 +175,7 @@ def main():
         df = load_data(city, month, day)
 
         time_stats(df)
-        # station_stats(df)
+        station_stats(df)
         # trip_duration_stats(df)
         # user_stats(df)
 
