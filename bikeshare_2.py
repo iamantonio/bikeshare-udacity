@@ -184,6 +184,26 @@ def user_stats(df, city):
     print('-' * 40)
 
 
+def display_raw_data(df):
+    '''
+    This function will allow the user to display 5 rows of the filtered data and will call the next 5
+    rows of data everytime the user response with a "yes".
+    :param df: filtered dataframes
+    :return: 5 rows of raw data and 5 more every time user says yes
+    '''
+    first_slice = 0
+    while True:
+        user_request = input('Would you like to see the 5 lines of the raw data? (Yes / No): ').lower()
+
+        if user_request == 'yes':
+            print(df.iloc[first_slice:first_slice + 5])
+            first_slice += 5
+        elif user_request == 'no':
+            break
+        else:
+            print('Please type in either "Yes" or "No"')
+
+
 def main():
     while True:
         city, month, day = get_filters()
@@ -196,6 +216,8 @@ def main():
         trip_duration_stats(df)
         input('Press enter to continue..')
         user_stats(df, city)
+        input('Press enter to continue..')
+        display_raw_data(df)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
