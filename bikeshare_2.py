@@ -137,38 +137,47 @@ def station_stats(df):
           group_stations.size().sort_values(ascending=False).head(1))
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-' * 40)
-#
-#
-# def trip_duration_stats(df):
-#     """Displays statistics on the total and average trip duration."""
-#
-#     print('\nCalculating Trip Duration...\n')
-#     start_time = time.time()
-#
-#     # display total travel time
-#
-#     # display mean travel time
-#
-#     print("\nThis took %s seconds." % (time.time() - start_time))
-#     print('-' * 40)
-#
-#
-# def user_stats(df):
-#     """Displays statistics on bikeshare users."""
-#
-#     print('\nCalculating User Stats...\n')
-#     start_time = time.time()
-#
-#     # Display counts of user types
-#
-#     # Display counts of gender
-#
-#     # Display earliest, most recent, and most common year of birth
-#
-#     print("\nThis took %s seconds." % (time.time() - start_time))
-#     print('-' * 40)
-#
-#
+
+
+def trip_duration_stats(df):
+    """Displays statistics on the total and average trip duration."""
+
+    print('\nCalculating Trip Duration...\n')
+    start_time = time.time()
+
+    # display total travel time
+    print('The total travel time is', df['Trip Duration'].sum())
+    # display mean travel time
+    print('The average travel time is', df['Trip Duration'].mean())
+    print("\nThis took %s seconds." % (time.time() - start_time))
+    print('-' * 40)
+
+
+def user_stats(df, city):
+    """Displays statistics on bikeshare users."""
+
+    print('\nCalculating User Stats...\n')
+    start_time = time.time()
+
+    # Display counts of user types
+    print('The count of user types is', df['User Type'].value_counts())
+    # Display counts of gender
+    # Gender is only available for New York City and Chicago
+    # and I need a conditional to make sure gender and birth year is not displayed when
+    # user selects Washington
+    if city != 'washington':
+        print('The gender count for ' + city.replace('_', " ").capitalize() + ' is', df['Gender'].value_counts())
+        # Display earliest, most recent, and most common year of birth
+        print('The oldest user in ' + city.replace('_', " ").capitalize() + ' was born in',
+              df['Birth Year'].mode()[0].astype(int))
+        print('The youngest user in ' + city.replace('_', " ").capitalize() + ' was born in',
+              df['Birth Year'].max().astype(int))
+        print('The most common birth year in ' + city.replace('_', " ").capitalize() + ' is',
+              df['Birth Year'].mean().astype(int))
+    print("\nThis took %s seconds." % (time.time() - start_time))
+    print('-' * 40)
+
+
 def main():
     while True:
         city, month, day = get_filters()
@@ -176,8 +185,8 @@ def main():
 
         time_stats(df)
         station_stats(df)
-        # trip_duration_stats(df)
-        # user_stats(df)
+        trip_duration_stats(df)
+        user_stats(df, city)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
