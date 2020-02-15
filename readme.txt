@@ -16,3 +16,8 @@ https://stackoverflow.com/questions/21291259/convert-floats-to-ints-in-pandas
 I also referred to the Pandas docs:
 
 https://pandas.pydata.org/
+
+
+I looked up how to view a number of rows at a time:
+
+https://www.shanelynn.ie/select-pandas-dataframe-rows-and-columns-using-iloc-loc-and-ix/
