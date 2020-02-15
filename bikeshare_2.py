@@ -17,10 +17,13 @@ def get_filters():
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
     print('Hello! Let\'s explore some US bikeshare data!')
+    usr_name = input('Before we get started, what is your name?: ').capitalize()
     # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
     while True:
-        city = input("What city are you interested in? Chicago, New York City, or Washington?: ").lower().replace(" ",
-                                                                                                                  "_")
+        city = input(f"\n{usr_name}, what city are you interested in getting bikeshare data for?\n"
+                     f"Please type in the one of the following: Chicago, New York City, or Washington\n"
+                     f"City Name: ").lower().replace(" ",
+                                                     "_")
         if city == "chicago" or city == "new_york_city" or city == "washington":
             break
         else:
@@ -42,7 +45,7 @@ def get_filters():
         'december'
     ]
     while True:
-        month = input("Which month are you interested in?: ").lower()
+        month = input("\nWhich month are you interested in?: ").lower()
         if month in months or month == "all":
             break
         else:
@@ -59,7 +62,7 @@ def get_filters():
         'saturday'
     ]
     while True:
-        day = input("Please type in the day of the week you are interested in or type all: ").lower()
+        day = input("\nPlease type in the day of the week you are interested in or type all: ").lower()
         if day in day_of_week or day == 'all':
             break
         else:
@@ -112,9 +115,9 @@ def time_stats(df):
     # display the most common month
     print("The most common month:", df['Month'].mode()[0])
     # display the most common day of week
-    print("The most common day of the week:", df['Day'].mode()[0])
+    print("\nThe most common day of the week:", df['Day'].mode()[0])
     # display the most common start hour
-    print("The most common start hour is:", df['Start Hour'].mode()[0])
+    print("\nThe most common start hour is:", df['Start Hour'].mode()[0])
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-' * 40)
 
@@ -129,12 +132,13 @@ def station_stats(df):
     print('The most commonly used start station is', df['Start Station'].mode()[0])
 
     # display most commonly used end station
-    print('The most commonly used end station is', df['End Station'].mode()[0])
+    print('\nThe most commonly used end station is', df['End Station'].mode()[0])
     # display most frequent combination of start station and end station trip
     # In order to display the most frequent combination of start and end station trip, i will need to groupby
     group_stations = df.groupby(['Start Station', 'End Station'])
-    print('The most frequent combination of start station and end station trip is: \n',
-          group_stations.size().sort_values(ascending=False).head(1))
+    value_sorted = group_stations.size().sort_values(ascending=False).head(1)
+    print('\nThe most frequent combination of start station and end station trip is: \n',
+          value_sorted.to_string())
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-' * 40)
 
@@ -148,7 +152,7 @@ def trip_duration_stats(df):
     # display total travel time
     print('The total travel time is', df['Trip Duration'].sum())
     # display mean travel time
-    print('The average travel time is', df['Trip Duration'].mean())
+    print('\nThe average travel time is', df['Trip Duration'].mean())
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-' * 40)
 
@@ -160,19 +164,21 @@ def user_stats(df, city):
     start_time = time.time()
 
     # Display counts of user types
-    print('The count of user types is', df['User Type'].value_counts())
+    user_type = df['User Type'].value_counts()
+    print('The count of user types is\n', user_type.to_string())
     # Display counts of gender
     # Gender is only available for New York City and Chicago
     # and I need a conditional to make sure gender and birth year is not displayed when
     # user selects Washington
     if city != 'washington':
-        print('The gender count for ' + city.replace('_', " ").capitalize() + ' is', df['Gender'].value_counts())
+        gender = df['Gender'].value_counts()
+        print('\nThe gender count for ' + city.replace('_', " ").capitalize() + ' is\n', gender.to_string())
         # Display earliest, most recent, and most common year of birth
-        print('The oldest user in ' + city.replace('_', " ").capitalize() + ' was born in',
+        print('\nThe oldest user in ' + city.replace('_', " ").capitalize() + ' was born in',
               df['Birth Year'].mode()[0].astype(int))
-        print('The youngest user in ' + city.replace('_', " ").capitalize() + ' was born in',
+        print('\nThe youngest user in ' + city.replace('_', " ").capitalize() + ' was born in',
               df['Birth Year'].max().astype(int))
-        print('The most common birth year in ' + city.replace('_', " ").capitalize() + ' is',
+        print('\nThe most common birth year in ' + city.replace('_', " ").capitalize() + ' is',
               df['Birth Year'].mean().astype(int))
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-' * 40)
@@ -184,8 +190,11 @@ def main():
         df = load_data(city, month, day)
 
         time_stats(df)
+        input('Press enter to continue..')  # I want the user to be able to read the data before continuing.
         station_stats(df)
+        input('Press enter to continue..')
         trip_duration_stats(df)
+        input('Press enter to continue..')
         user_stats(df, city)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
